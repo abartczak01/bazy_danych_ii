@@ -81,21 +81,3 @@ CREATE (e)-[:WORKS_IN]->(d)
 
 MATCH (manager:Employee {position: 'Manager'})-[:WORKS_IN]->(department:Department)
 CREATE (manager)-[:MANAGES]->(department)
-
-MATCH (e: Employee {department: 'T'}) DETACH DELETE e;
-MATCH (d: Department {name: 'T'}) DETACH DELETE d;
-
-CREATE (:Employee {name: 'imie1', surname: 'nazwisko1', department: 'T', position: 'Manager'})
-CREATE (:Employee {name: 'imie2', surname: 'nazwisko2', department: 'T', position: 'Tpozycja'})
-CREATE (:Employee {name: 'imie3', surname: 'nazwisko3', department: 'T', position: 'Tpozycja'})
-CREATE (:Department {name: 'T'})
-
-// Utwórz relacje WORKS_IN tylko dla węzłów, które jeszcze nie mają tej relacji
-MATCH (e:Employee), (d:Department)
-WHERE e.department = d.name AND NOT (e)-[:WORKS_IN]->(d)
-CREATE (e)-[:WORKS_IN]->(d);
-
-// Utwórz relacje MANAGES tylko dla węzłów Manager, które jeszcze nie mają tej relacji
-MATCH (manager:Employee {position: 'Manager'})-[:WORKS_IN]->(department:Department)
-WHERE NOT (manager)-[:MANAGES]->(department)
-CREATE (manager)-[:MANAGES]->(department);
